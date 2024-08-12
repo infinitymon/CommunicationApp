@@ -1,29 +1,30 @@
-// Import the Express module
-const express = require('express')
-const mongoose = require('mongoose')
-require('dotenv').config()
+import express from 'express'
+import authentication from './routes/authentication.js';
+import admin from './routes/admin.js';
+import sequelize from './utils/database.js';
+
+import './models/Calls.js';
+import './models/User.js';
 
 // Create a new Express application
 const app = express();
 app.use(express.json());
 
-const DB = ""
+sequelize.sync({
+  alter: true,
+  force: false,
+})
+  .then(() => console.log('Database connected successfully'))
+  .catch(err => console.log(err));
 
-mongoose
-  .connect(DB, {useNewUrlParser: true})
-  .then(()=>console.log("MongoDB connected"))
-  .catch((err) => console.log(err))
 
 // Define a route handler for the default home page
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-const uploadRoute = require('./routes/upload')
-app.use('/upload', uploadRoute)
-
-const authRoute = require('./routes/authentication')
-app.use('/authentication', authRoute)
+app.use('/admin', admin)
+app.use('/authentication', authentication)
 
 // Start the server on port 3000
 const PORT = process.env.PORT || 5000;

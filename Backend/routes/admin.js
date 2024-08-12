@@ -1,10 +1,6 @@
-// upload.js
-const express = require('express');
-// const path = require('path');
-const multer = require('multer');
-// const ExcelJS = require('exceljs');
-const path = require('path');
-const ExcelJS = require('exceljs');
+import express from 'express';
+import multer from 'multer';
+import ExcelJS from 'exceljs';
 
 const router = express.Router();
 
@@ -17,12 +13,10 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
-// const storage = multer.memoryStorage();
 
 // Initialize Multer with the defined storage
 const upload = multer({ storage: storage });
 
-// Define the upload route
 router.post('/', upload.single('file'), async (req, res, next) => {
   const file = req.file;
 
@@ -31,7 +25,6 @@ router.post('/', upload.single('file'), async (req, res, next) => {
     return res.status(400).send('No file uploaded.');
   }
 
-  // Verify file extension
   const fileExtension = path.extname(file.originalname);
   if (fileExtension !== '.xlsx') {
     return res.status(400).send('Invalid file type. Please upload an .xlsx file.');
@@ -39,10 +32,7 @@ router.post('/', upload.single('file'), async (req, res, next) => {
 
   const filePath = file.path;
   console.log(fileExtension, filePath, file.originalname);
-
-  // Process the file with ExcelJS or any further logic here
   res.status(200).json({ message: 'File uploaded successfully!', file: file.originalname });
 });
 
-
-module.exports = router;
+export default router;
