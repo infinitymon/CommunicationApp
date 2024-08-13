@@ -14,6 +14,10 @@ const Users = sequelize.define('user', {
     },
     phoneNumber: {
         type: DataTypes.BIGINT
+    },
+    role: {
+        type: String,
+        enum: ["agent", "admin"]
     }
 })
 

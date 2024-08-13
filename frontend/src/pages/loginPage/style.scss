@@ -4,7 +4,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    
+
     &_contentBox {
         background-color: lightgrey;
         /* Light grey background */
@@ -14,7 +14,8 @@
         /* Add some padding */
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         width: max-content;
-        &_items{
+
+        &_items {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -57,4 +58,55 @@ button {
 a {
     text-decoration: none;
     color: #007bff;
+}
+
+.dropdown-button {
+    margin-bottom: 10px;
+}
+
+// .dropdown {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+// }
+
+.dropdown-button {
+    /* Style your dropdown button */
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    color: black;
+}
+
+.dropdown-menu {
+    /* Style the dropdown menu */
+    // position: absolute;
+    // top: 100%;
+    // left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    padding: 8px 0;
+    align-self: center;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-menu li {
+    /* Style the list items within the menu */
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+    /* Add hover effect */
+    background-color: #f5f5f5;
 }
