@@ -10,6 +10,7 @@ import './models/User.js';
 // Create a new Express application
 const app = express();
 app.use(express.json());
+app.use(cors('*'))
 
 sequelize.sync({
   alter: true,
