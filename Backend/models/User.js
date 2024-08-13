@@ -16,7 +16,7 @@ const Users = sequelize.define('user', {
         type: DataTypes.BIGINT
     },
     role: {
-        type: String,
+        type: DataTypes.String,
         enum: ["agent", "admin"]
     }
 })
