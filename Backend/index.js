@@ -3,6 +3,7 @@ import authentication from './routes/authentication.js';
 import admin from './routes/admin.js';
 import call from './routes/call.js'
 import sequelize from './utils/database.js';
+import cors from 'cors';
 
 import './models/Calls.js';
 import './models/User.js';
