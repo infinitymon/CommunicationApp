@@ -1,5 +1,6 @@
-import multer from "multer";
 import path from 'path'
+import ExcelJS from 'exceljs';
+import Call from '../models/Calls.js';
 
 class AdminController{
     constructor() {
@@ -28,8 +29,59 @@ class AdminController{
 
         const filePath = file.path;
 
-        // Process the file with ExcelJS or any further logic here
-        res.status(200).json({ message: 'File uploaded successfully!', file: file.originalname });
+        // Create a new ExcelJS workbook
+        const workbook = new ExcelJS.Workbook();
+
+        try {
+            // Read the uploaded Excel file
+            console.log('Reading the Excel file...');
+            await workbook.xlsx.readFile(filePath);
+            console.log('File read successfully!');
+            const worksheet = workbook.getWorksheet(1); // Read the first worksheet
+            // Get all sheets
+            const sheets = workbook.worksheets;
+
+            // Iterate over the sheets and get their names and indices
+            sheets.forEach((sheet, index) => {
+                console.log(`Sheet Index: ${index}, Sheet Name: ${sheet.name}`);
+            });
+
+            // Array to hold the rows to be inserted into the database
+            const rowsData = [];
+
+            worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+                if(rowNumber === 1) return;
+                // Process each row
+                const rowData = {
+                    type: 'Pending',
+                    from: row.getCell(4).value,
+                    to: '',
+                    createdDate: new Date(),
+                    followupStatus: '',
+                    resolution: '',
+                    agent: row.getCell(1).value,
+                };
+                console.log(rowNumber, row.getCell(1).value, row.getCell(4).value, rowsData.length);
+    
+                rowsData.push(rowData);
+            });
+
+            // Process rows data in chunks
+            const chunkSize = 100;
+            for (let i = 0; i < rowsData.length; i += chunkSize) {
+                const chunk = rowsData.slice(i, i + chunkSize);
+                await Call.bulkCreate(chunk);
+            }
+
+
+            // Insert the rowsData array into your database here
+            // For example, using an ORM or direct database query
+
+            res.status(200).json({ message: 'File uploaded and processed successfully!', data: rowsData });
+        } catch (err) {
+            console.error('Error reading Excel file:', err);
+            res.status(500).send('Error processing the file.');
+        }
     }
 
 }

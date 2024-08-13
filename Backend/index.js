@@ -1,6 +1,7 @@
 import express from 'express'
 import authentication from './routes/authentication.js';
 import admin from './routes/admin.js';
+import call from './routes/call.js'
 import sequelize from './utils/database.js';
 
 import './models/Calls.js';
@@ -25,6 +26,7 @@ app.get('/', (req, res) => {
 
 app.use('/admin', admin)
 app.use('/authentication', authentication)
+app.use('/call', call)
 
 // Start the server on port 3000
 const PORT = process.env.PORT || 5000;
