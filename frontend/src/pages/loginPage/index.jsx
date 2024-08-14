@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './style.scss';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('agent');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     try {
       const response = await axios.post('http://localhost:5000/authentication/login', {
         email,
         password,
         role, // Include role in the request body
       });
-
       // Handle the login response (e.g., redirect to the dashboard)
       console.log('Login successful:', response.data);
+      if (response.data.message === "Success"){
+        navigate('/home')
+      }
+
     } catch (error) {
       // Handle login errors (e.g., display an error message)
       console.error('Login error:', error);
