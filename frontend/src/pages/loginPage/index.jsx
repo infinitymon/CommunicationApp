@@ -5,7 +5,7 @@ import './style.scss';
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState('agent');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -37,54 +37,49 @@ const LoginPage = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionSelect = (option) => {
-    setSelectedOption(option);
-    setRole(option.value);
-    setIsOpen(false); // Close the dropdown after selection
-  };
-
   return (
     <div className="login-container">
       <div className='login-container_contentBox'>
-        <div className='login-container_contentBox_items'>
+        <div className='login-container_contentBox_items mb-2'>
 
           <h1>Log in to your Agent account</h1>
           <p>Please enter your email and password.</p>
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+          <form onSubmit={handleSubmit} className='col-12'>
+            <div className='row mb-2'>
+              <label className='col-2' htmlFor="email">Email:</label>
+              <div className='col-8 d-flex justify-content-end'>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
             </div>
-            <div>
-              <label htmlFor="password">Password:</label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+            <div className='row mb-2'>
+              <label className='col-2' htmlFor="password">Password:</label>
+              <div className='col-8 d-flex justify-content-end'>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
             </div>
-            <div className='dropdown'>
-              <label htmlFor="role">Role:</label>
-              <button className="dropdown-button" onClick={handleToggle}>
-                {selectedOption ? selectedOption.label : 'Select an option'}
-              </button>
-              {isOpen && (
-                <ul className="dropdown-menu">
+            <div className='row mb-2'>
+              <label className='col-2' htmlFor="role">Role:</label>
+              <div className='col-8'>
+                <select value={role} onChange={(e) => setRole(e.target.value)}>
                   {options.map((option) => (
-                    <li key={option.value} onClick={() => handleOptionSelect(option)}>
+                    <option className='dropdown-item' key={option.value}>
                       {option.label}
-                    </li>
+                    </option>
                   ))}
-                </ul>
-              )}
+                </select>
+              </div>
             </div>
             <button type="submit">Login</button>
           </form>
