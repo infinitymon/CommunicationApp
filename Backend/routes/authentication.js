@@ -14,20 +14,23 @@ router.post('/login', async (req, res, next) => {
     })
 
         .then(dbUser => {
-            // console.log(dbUser)
+            console.log(dbUser)
             if (!dbUser) {
                 return res.json({
                     message: "Invalid Email or Password"
                 })
             }
-            bcrypt.compare(userInfo.password, dbUser.password)
+            console.log(dbUser.dataValues.password)
+            console.log(userInfo.password)
+            bcrypt.compare(userInfo.password, dbUser.dataValues.password)
             .then(correct => {
-                // console.log(correct)
+                console.log(correct)
                 if(correct) {
                     const payload = {
                         // password: dbUser.password,
-                        _id: dbUser._id,
-                        email: dbUser.email
+                        _id: dbUser.dataValues._id,
+                        email: dbUser.dataValues.email,
+                        role: dbUser.dataValues.agent
                     }
                     // console.log(payload)
                     // console.log(process.env.JWT_SECRET)
@@ -40,7 +43,8 @@ router.post('/login', async (req, res, next) => {
                         res.json({
                             message:"Success",
                             token: `${token}`
-                        })       
+                        })
+                        console.log(res.json)       
                 }
                 else {
                     return res.json({
