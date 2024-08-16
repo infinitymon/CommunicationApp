@@ -34,17 +34,10 @@ class AdminController{
 
         try {
             // Read the uploaded Excel file
-            console.log('Reading the Excel file...');
             await workbook.xlsx.readFile(filePath);
-            console.log('File read successfully!');
             const worksheet = workbook.getWorksheet(1); // Read the first worksheet
             // Get all sheets
-            const sheets = workbook.worksheets;
-
-            // Iterate over the sheets and get their names and indices
-            sheets.forEach((sheet, index) => {
-                console.log(`Sheet Index: ${index}, Sheet Name: ${sheet.name}`);
-            });
+            const sheets = workbook.worksheets;;
 
             // Array to hold the rows to be inserted into the database
             const rowsData = [];
@@ -59,7 +52,7 @@ class AdminController{
                     createdDate: new Date(),
                     followupStatus: '',
                     resolution: '',
-                    agent: row.getCell(1).value,
+                    agent: row.getCell(1).value?.toLowerCase(),
                 };
                 console.log(rowNumber, row.getCell(1).value, row.getCell(4).value, rowsData.length);
     
