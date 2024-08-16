@@ -10,7 +10,8 @@ router.post('/login', async (req, res, next) => {
     console.log(userInfo.email)
 
     User.findOne({
-        email: userInfo.email,
+        where : {
+        email: userInfo.email}
     })
 
         .then(dbUser => {
@@ -26,9 +27,9 @@ router.post('/login', async (req, res, next) => {
                     if (correct) {
                         const payload = {
                             // password: dbUser.password,
-                            _id: dbUser.dataValues._id,
+                            id: dbUser.dataValues.id,
                             email: dbUser.dataValues.email,
-                            role: dbUser.dataValues.agent
+                            role: dbUser.dataValues.role
                         }
                         // console.log(payload)
                         // console.log(process.env.JWT_SECRET)
@@ -42,8 +43,8 @@ router.post('/login', async (req, res, next) => {
                             message: "Success",
                             token: `${token}`
                         })
-                        console.log(token)
-                        console.log(res.json)
+                        // console.log(token)
+                        // console.log(res.json)
                     }
                     else {
                         return res.json({

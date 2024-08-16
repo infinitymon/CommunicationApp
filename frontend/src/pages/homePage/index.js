@@ -1,9 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import dayjs from 'dayjs';
+import { jwtDecode } from "jwt-decode";
+import Cookies from 'js-cookie';
+
 
 const HomePage = () => {
     const [result, setResult] = useState(null);
+
+    const token = Cookies.get('token')
+    const tokenData = jwtDecode(token)
+
+    const agentId = `${tokenData.role} ${tokenData.id}`
+
+    // console.log('The agent id is ' + agentId)
 
     useEffect(()=>{
         axios.get('http://localhost:5000/call', {

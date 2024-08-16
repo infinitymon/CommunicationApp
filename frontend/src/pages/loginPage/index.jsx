@@ -30,6 +30,9 @@ const LoginPage = () => {
       secure: true, // Cookie will only be sent over HTTPS
       sameSite: 'Strict' // CSRF protection
     });
+
+    console.log(Cookies.get('token'))
+
   }
 
   const handleSubmit = async (event) => {
