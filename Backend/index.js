@@ -4,6 +4,9 @@ import admin from './routes/admin.js';
 import call from './routes/call.js'
 import sequelize from './utils/database.js';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 import './models/Calls.js';
 import './models/User.js';
@@ -31,7 +34,7 @@ app.use('/authentication', authentication)
 app.use('/call', call)
 
 // Start the server on port 3000
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

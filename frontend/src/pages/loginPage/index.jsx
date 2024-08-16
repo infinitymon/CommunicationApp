@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
+import dayjs from 'dayjs';
 import './style.scss';
 
 const LoginPage = () => {
@@ -8,6 +11,26 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('agent');
+  // const [token, setToken] = useState('');
+
+  const handleToken = (token) => {
+    // event.preventDefault();
+
+    const tokenData = jwtDecode(token);
+    console.log(tokenData);
+
+    const issuedAt = dayjs.unix(tokenData.iat);
+    const expiresAt = dayjs.unix(tokenData.exp);
+    const duration = expiresAt.diff(issuedAt, 'minute');
+    console.log(`Token validity period: ${duration} minutes`);
+
+
+    Cookies.set('token', token, {
+      expires: duration, // Cookie expires in 1 day
+      secure: true, // Cookie will only be sent over HTTPS
+      sameSite: 'Strict' // CSRF protection
+    });
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,7 +43,9 @@ const LoginPage = () => {
       });
       // Handle the login response (e.g., redirect to the dashboard)
       console.log('Login successful:', response.data);
-      if (response.data.message === "Success"){
+      if (response.data.message === "Success") {
+        // setToken(response.data.token);
+        handleToken(response.data.token);
         navigate('/home')
       }
 
