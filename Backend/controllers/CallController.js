@@ -16,7 +16,6 @@ class CallController{
     } 
 
     async index (req, res, next){
-        console.log(req.query, req.query.agent)
         try {
             let data = await Calls.findAll({ where: { agent: req.query.agent}})
             return this.apiResponse(res, "Records fetched successfully", 200, data)
