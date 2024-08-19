@@ -10,11 +10,20 @@ const HomePage = () => {
     const [result, setResult] = useState(null);
     const [followUp, setFollowUp] = useState({});
 
-    const handleChange = (id, value) => {
-        setFollowUp(prev => ({
-            ...prev,
-            [id]: value
-        }));
+    const handleChange = async (id, value) => {
+        try{
+            axios.put("http://localhost:5000/call/followUp", {
+                id: id,
+                followUp: value
+            })
+            setFollowUp(prev => ({
+                ...prev,
+                [id]: value
+            }));
+        }
+        catch(e){
+            console.log(e);
+        }
     };
 
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -36,14 +45,51 @@ const HomePage = () => {
         setResolutionInput('');
     };
 
-    const handleSave = () => {
-        // Update the resolution for the selected item
+    const handleSave = async () => {
         if (selectedItem) {
-            // You can perform an update operation here
-            // For example, updating local state
-            setResolvedItems(prev => new Set(prev).add(selectedItem.id));
+            try{
+
+                await axios.put("http://localhost:5000/call/resolution", {
+                    id: selectedItem.id,
+                    resolution: resolutionInput
+                })
+
+                console.log("SAVE BUTTON");
+
+                setResolvedItems(prev => new Set(prev).add(selectedItem.id));
+            }
+            catch(err){
+                console.error('Error updating resolution:', err);
+            }
         }
         handleDialogClose();
+    };
+
+    const handleFileUpload = (event, item) => {
+        const file = event.target.files[0];
+        if (file) {
+            // Here you can directly use the file object
+            console.log('Selected file:', file);
+    
+            // Example: You might want to read the file and upload its content
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const fileData = e.target.result;
+    
+                // Now you can send fileData and item.id to your server/database
+                axios.put('http://localhost:5000/call/recUpload', {
+                    id: item.id,
+                    recording: fileData
+                })
+                .then(response => {
+                    console.log('File uploaded successfully', response);
+                })
+                .catch(error => {
+                    console.error('File upload failed', error);
+                });
+            };
+            reader.readAsDataURL(file); // Read file as data URL (you can also use readAsArrayBuffer or readAsBinaryString)
+        }
     };
 
 
@@ -77,12 +123,12 @@ const HomePage = () => {
                         <th className="col-lg-1">Status</th>
                         <th className="col-lg-1">From</th>
                         <th className="col-lg-1">To</th>
-                        <th className="col-lg-1">Via Number</th>
                         <th className="col-lg-1">Created</th>
                         <th className="col-lg-1">Dialed</th>
                         <th className="col-lg-1">Duration</th>
                         <th className="col-lg-1">Follow Up</th>
-                        <th className="col-lg-3">Resolution</th>
+                        <th className="col-lg-2">Resolution</th>
+                        <th className="col-lg-2">Upload Recording</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,7 +138,6 @@ const HomePage = () => {
                             <td>{item.status}</td>
                             <td>{item.from}</td>
                             <td>{item.to}</td>
-                            <td>{item.from}</td>
                             <td>{dayjs(item.createdDate).format('MM/DD/YYYY')}</td>
                             <td>{item.dialedDate}</td>
                             <td>{item.duration}</td>
@@ -109,9 +154,16 @@ const HomePage = () => {
                             </td>
                             <td onClick={(e) => {
                                 handleResolutionClick(item);
-                                e.stopPropagation(); // Prevent row click event
+                                e.stopPropagation();
                             }}>
                                 {item.resolution}
+                            </td>
+                            <td>
+                                <input
+                                    type="file"
+                                    onChange={(e) => handleFileUpload(e, item)}
+                                    accept="audio/*" // Restrict to audio files
+                                />
                             </td>
                         </tr>
                     ))}

@@ -22,7 +22,64 @@ class CallController{
         } catch (e) {
             return next(new appError(e?.message, 500))
         }
-    }  
+    }
+    
+    async resolution (req, res, next){
+        try{
+            const callRec = await Calls.findOne({ where: { id: req.body.id } });
+
+            if (!callRec) {
+                return res.status(404).json({ message: 'Call record not found' });
+            }
+
+            callRec.resolution = req.body.resolution
+
+            await callRec.save();
+
+            res.status(200).json({message: "resolution updated successfully" , data: callRec})
+        }
+        catch(e){
+            next(e);
+        }
+    }
+
+    async followUp (req, res, next){
+        try{
+            const callRec = await Calls.findOne({ where: { id: req.body.id } });
+
+            if (!callRec) {
+                return res.status(404).json({ message: 'Call record not found' });
+            }
+
+            callRec.followupStatus = req.body.followUp
+
+            await callRec.save();
+
+            res.status(200).json({message: "followup updated successfully" , data: callRec})
+        }
+        catch(e){
+            next(e);
+        }
+    }
+
+    async recUpload (req, res, next){
+        try{
+            const callRec = await Calls.findOne({ where: { id: req.body.id } });
+
+            if (!callRec) {
+                return res.status(404).json({ message: 'Call record not found' });
+            }
+
+            callRec.recording = req.body.recording
+
+            await callRec.save();
+
+            res.status(200).json({message: "followup updated successfully" , data: callRec})
+        }
+        catch(e){
+            next(e);
+        }
+    }
 }
 
 export default CallController

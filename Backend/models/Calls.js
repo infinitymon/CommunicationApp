@@ -31,9 +31,13 @@ const Calls = sequelize.define('calls', {
     resolution: {
         type: DataTypes.STRING,
     },
+    recording: {
+        type: DataTypes.STRING,
+    },
     agent:{
         type: DataTypes.STRING
     }
+
 })
 
 export default Calls
