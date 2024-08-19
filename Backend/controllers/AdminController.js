@@ -1,17 +1,28 @@
 import path from 'path'
 import ExcelJS from 'exceljs';
-import Call from '../models/Calls.js';
+import Calls from '../models/Calls.js';
+import appError from "../utils/AppError.js";
 
 class AdminController{
     constructor() {
+        this.index = this.index.bind(this)
     }
 
-    async index(req, res) {
+    apiResponse(res, message, statusCode, data = {}, token = undefined){
+        res.status(statusCode).json({
+            message,
+            success: true,
+            data,
+            token
+        })
+    } 
+
+    async index (req, res, next){
         try {
-            const data = await this.model.getAll();
-            res.render('admin/index', { data });
-        } catch (error) {
-            res.status(500).send(error);
+            let data = await Calls.findAll()
+            return this.apiResponse(res, "Records fetched successfully", 200, data)
+        } catch (e) {
+            return next(new appError(e?.message, 500))
         }
     }
 
@@ -47,8 +58,8 @@ class AdminController{
                 // Process each row
                 const rowData = {
                     type: 'Pending',
-                    from: row.getCell(4).value,
-                    to: '',
+                    from: '',
+                    to: row.getCell(4).value,
                     createdDate: new Date(),
                     followupStatus: '',
                     resolution: '',

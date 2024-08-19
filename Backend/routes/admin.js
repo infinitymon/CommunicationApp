@@ -6,6 +6,7 @@ import upload from "../middleware/multerMiddleware.js";
 const router = express.Router();
 let admin = new AdminController()
 
-router.post('/', upload.single('file'), admin.upload);
+router.post('/upload', upload.single('file'), admin.upload);
+router.get('/', admin.index)
 
 export default router;
