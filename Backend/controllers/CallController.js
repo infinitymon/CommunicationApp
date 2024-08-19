@@ -80,6 +80,17 @@ class CallController{
             next(e);
         }
     }
+
+    async typeUpdate (req, res, next){
+        const {id, type} = req.body
+
+        try {
+            await Call.update({ type: type }, { where: { id: id } });
+            res.status(200).json({ message: 'Call type updated successfully' });
+        } catch (error) {
+            res.status(500).json({ message: 'Error updating call type', error });
+        }
+    }
 }
 
 export default CallController

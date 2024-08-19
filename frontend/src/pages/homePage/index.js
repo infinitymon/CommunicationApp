@@ -92,6 +92,25 @@ const HomePage = () => {
         }
     };
 
+    const handleDialed = async (id) => {
+        try {
+            // Update the type in the database
+            await axios.put('http://localhost:5000/call/type', {
+                id: id,
+                type: 'Dialed'
+            });
+    
+            // Update the local state to reflect the change on the UI
+            setResult(prevResult =>
+                prevResult.map(item =>
+                    item.id === id ? { ...item, type: 'Dialed' } : item
+                )
+            );
+        } catch (error) {
+            console.error('Error updating type to Dialed:', error);
+        }
+    };
+
 
     const token = Cookies.get('token')
     const tokenData = jwtDecode(token)
@@ -141,7 +160,9 @@ const HomePage = () => {
                                 {followUp[item.id] === 'Resolved' || item.followupStatus === 'Resolved' ? (
                                     <span>{item.to}</span>
                                 ) : (
-                                    <a href={`tel:${item.to}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                    <a href={`tel:${item.to}`}
+                                    style={{ textDecoration: 'none', color: 'inherit' }} 
+                                    onClick={handleDialed(item.id)}>
                                         {item.to}
                                     </a>
                                 )}
