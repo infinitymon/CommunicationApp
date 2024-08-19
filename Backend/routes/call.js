@@ -10,5 +10,6 @@ router.get('/', call.index);
 router.put('/resolution', call.resolution);
 router.put('/followUp', call.followUp);
 router.put('/recUpload', call.recUpload);
+router.put('/type', call.typeUpdate);
 
 export default router;
