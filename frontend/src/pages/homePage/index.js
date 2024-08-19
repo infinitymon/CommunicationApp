@@ -11,7 +11,7 @@ const HomePage = () => {
     const [followUp, setFollowUp] = useState({});
 
     const handleChange = async (id, value) => {
-        try{
+        try {
             axios.put("http://localhost:5000/call/followUp", {
                 id: id,
                 followUp: value
@@ -21,7 +21,7 @@ const HomePage = () => {
                 [id]: value
             }));
         }
-        catch(e){
+        catch (e) {
             console.log(e);
         }
     };
@@ -47,7 +47,7 @@ const HomePage = () => {
 
     const handleSave = async () => {
         if (selectedItem) {
-            try{
+            try {
 
                 await axios.put("http://localhost:5000/call/resolution", {
                     id: selectedItem.id,
@@ -58,7 +58,7 @@ const HomePage = () => {
 
                 setResolvedItems(prev => new Set(prev).add(selectedItem.id));
             }
-            catch(err){
+            catch (err) {
                 console.error('Error updating resolution:', err);
             }
         }
@@ -70,23 +70,23 @@ const HomePage = () => {
         if (file) {
             // Here you can directly use the file object
             console.log('Selected file:', file);
-    
+
             // Example: You might want to read the file and upload its content
             const reader = new FileReader();
             reader.onload = (e) => {
                 const fileData = e.target.result;
-    
+
                 // Now you can send fileData and item.id to your server/database
                 axios.put('http://localhost:5000/call/recUpload', {
                     id: item.id,
                     recording: fileData
                 })
-                .then(response => {
-                    console.log('File uploaded successfully', response);
-                })
-                .catch(error => {
-                    console.error('File upload failed', error);
-                });
+                    .then(response => {
+                        console.log('File uploaded successfully', response);
+                    })
+                    .catch(error => {
+                        console.error('File upload failed', error);
+                    });
             };
             reader.readAsDataURL(file); // Read file as data URL (you can also use readAsArrayBuffer or readAsBinaryString)
         }
@@ -137,13 +137,21 @@ const HomePage = () => {
                             <td>{item.type}</td>
                             <td>{item.status}</td>
                             <td>{item.from}</td>
-                            <td>{item.to}</td>
+                            <td>
+                                {followUp[item.id] === 'Resolved' || item.followupStatus === 'Resolved' ? (
+                                    <span>{item.to}</span>
+                                ) : (
+                                    <a href={`tel:${item.to}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                        {item.to}
+                                    </a>
+                                )}
+                            </td>
                             <td>{dayjs(item.createdDate).format('MM/DD/YYYY')}</td>
                             <td>{item.dialedDate}</td>
                             <td>{item.duration}</td>
                             <td>
-                                <select value={followUp[item.id] || ''}
-                                onChange={(e) => handleChange(item.id, e.target.value)}>
+                                <select value={followUp[item.id] || item.followupStatus || ''}
+                                    onChange={(e) => handleChange(item.id, e.target.value)}>
                                     <option value="" disabled>Select an option</option>
                                     {followOptions.map((option, idx) => (
                                         <option key={idx} value={option}>
