@@ -21,8 +21,7 @@ const LoginPage = () => {
 
     const issuedAt = dayjs.unix(tokenData.iat);
     const expiresAt = dayjs.unix(tokenData.exp);
-    const duration = expiresAt.diff(issuedAt, 'minute');
-    console.log(`Token validity period: ${duration} minutes`);
+    const duration = expiresAt.diff(issuedAt,'minute');
 
 
     Cookies.set('token', token, {
@@ -30,8 +29,6 @@ const LoginPage = () => {
       secure: true, // Cookie will only be sent over HTTPS
       sameSite: 'Strict' // CSRF protection
     });
-
-    console.log(Cookies.get('token'))
 
   }
 
@@ -45,11 +42,15 @@ const LoginPage = () => {
         role, // Include role in the request body
       });
       // Handle the login response (e.g., redirect to the dashboard)
-      console.log('Login successful:', response.data);
       if (response.data.message === "Success") {
         // setToken(response.data.token);
         handleToken(response.data.token);
-        navigate('/home')
+        if(role == 'Agent'){
+          navigate('/home')
+        }
+        else{
+          navigate('/admin')
+        }
       }
 
     } catch (error) {

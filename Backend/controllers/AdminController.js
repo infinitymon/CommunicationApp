@@ -26,7 +26,39 @@ class AdminController{
         }
     }
 
+    async index (req, res, next){
+        try {
+            // Extracting page and limit from query parameters, setting defaults
+            const page = parseInt(req.query.page, 10) || 1;
+            const limit = 100;
+            
+            // Calculating offset based on current page and limit
+            const offset = (page - 1) * limit;
+            
+            // Fetching data with limit and offset for pagination
+            const callRecords = await Calls.findAll({
+                limit: limit,
+                offset: offset
+            });
+    
+            // Optionally, you can also fetch the total number of records
+            const totalRecords = await Calls.count();
+    
+            // Returning paginated response
+            return this.apiResponse(res, "Records fetched successfully", 200, {
+                callRecords,                    // <-- This is now directly under res.data
+                totalRecords: totalRecords,
+                totalPages: Math.ceil(totalRecords / limit),
+                currentPage: page,
+                pageSize: limit
+            });
+        } catch (e) {
+            return next(new appError(e?.message, 500));
+        }
+    }
+
     async upload(req, res) {
+        console.log(req.file)
         const file = req.file;
         if (!file) {
             return res.status(400).send('No file uploaded.');
@@ -65,7 +97,6 @@ class AdminController{
                     resolution: '',
                     agent: row.getCell(1).value?.toLowerCase(),
                 };
-                console.log(rowNumber, row.getCell(1).value, row.getCell(4).value, rowsData.length);
     
                 rowsData.push(rowData);
             });
@@ -74,7 +105,7 @@ class AdminController{
             const chunkSize = 100;
             for (let i = 0; i < rowsData.length; i += chunkSize) {
                 const chunk = rowsData.slice(i, i + chunkSize);
-                await Call.bulkCreate(chunk);
+                await Calls.bulkCreate(chunk);
             }
 
 

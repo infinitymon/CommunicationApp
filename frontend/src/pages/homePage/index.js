@@ -105,7 +105,7 @@ const HomePage = () => {
     useEffect(() => {
         axios.get('http://localhost:5000/call', {
             params: {
-                agent: agentId
+                agent: 'agent 1'
             }
         }).then(res => {
             const { data } = res.data;

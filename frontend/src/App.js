@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import './App.css';
 import LoginPage from './pages/loginPage';
 import HomePage from './pages/homePage';
+import AdminHome from './pages/adminHome';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage/>}/>
           <Route path="/home" element={<HomePage/>}/>
+          <Route path="/admin" element={<AdminHome/>}/>
         </Routes>
       </div>
 
