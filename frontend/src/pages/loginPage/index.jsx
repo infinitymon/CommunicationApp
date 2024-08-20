@@ -36,7 +36,7 @@ const LoginPage = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/authentication/login', {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/authentication/login`, {
         email,
         password,
         role, // Include role in the request body

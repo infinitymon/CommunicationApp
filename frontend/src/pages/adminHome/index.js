@@ -26,7 +26,7 @@ const AdminHome = () => {
       ];
 
     const fetchData = async () => {
-        axios.get(`http://localhost:5000/admin?page=${pageNumber}`).then(res => {
+        axios.get(`${process.env.REACT_APP_API_BASE_URL}/admin?page=${pageNumber}`).then(res => {
             setResult(res.data.data)
         }).catch(err => console.log(err))
     }
@@ -40,7 +40,7 @@ const AdminHome = () => {
         const formData = new FormData();
         formData.append('file', file);
 
-        await axios.post(`http://localhost:5000/admin/upload`, formData, {
+        await axios.post(`${process.env.REACT_APP_API_BASE_URL}/admin/upload`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

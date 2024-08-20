@@ -12,7 +12,7 @@ const HomePage = () => {
 
     const handleChange = async (id, value) => {
         try {
-            axios.put("http://localhost:5000/call/followUp", {
+            axios.put(`${process.env.REACT_APP_API_BASE_URL}/call/followUp`, {
                 id: id,
                 followUp: value
             })
@@ -49,7 +49,7 @@ const HomePage = () => {
         if (selectedItem) {
             try {
 
-                await axios.put("http://localhost:5000/call/resolution", {
+                await axios.put(`${process.env.REACT_APP_API_BASE_URL}/call/resolution`, {
                     id: selectedItem.id,
                     resolution: resolutionInput
                 })
@@ -77,7 +77,7 @@ const HomePage = () => {
                 const fileData = e.target.result;
 
                 // Now you can send fileData and item.id to your server/database
-                axios.put('http://localhost:5000/call/recUpload', {
+                axios.put(`${process.env.REACT_APP_API_BASE_URL}/call/recUpload`, {
                     id: item.id,
                     recording: fileData
                 })
@@ -95,7 +95,7 @@ const HomePage = () => {
     const handleDialed = async (id) => {
         try {
             // Update the type in the database
-            await axios.put('http://localhost:5000/call/typeUpdate', {
+            await axios.put(`${process.env.REACT_APP_API_BASE_URL}/call/typeUpdate`, {
                 id: id,
                 type: 'Dialed'
             });
@@ -122,7 +122,7 @@ const HomePage = () => {
     // console.log('The agent id is ' + agentId)
 
     useEffect(() => {
-        axios.get('http://localhost:5000/call', {
+        axios.get(`${process.env.REACT_APP_API_BASE_URL}/call`, {
             params: {
                 agent: 'agent 1'
             }
