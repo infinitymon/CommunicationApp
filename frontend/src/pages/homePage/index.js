@@ -162,7 +162,7 @@ const HomePage = () => {
                                 ) : (
                                     <a href={`tel:${item.to}`}
                                     style={{ textDecoration: 'none', color: 'inherit' }} 
-                                    onClick={handleDialed(item.id)}>
+                                    onClick={() => handleDialed(item.id)}>
                                         {item.to}
                                     </a>
                                 )}
