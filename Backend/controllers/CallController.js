@@ -82,10 +82,18 @@ class CallController{
     }
 
     async typeUpdate (req, res, next){
-        const {id, type} = req.body
-
         try {
-            await Call.update({ type: type }, { where: { id: id } });
+            const callRec = await Calls.findOne({ where: { id: req.body.id } });
+
+            if (!callRec) {
+                return res.status(404).json({ message: 'Call record not found' });
+            }
+
+            callRec.type = req.body.type
+
+            await callRec.save();
+
+
             res.status(200).json({ message: 'Call type updated successfully' });
         } catch (error) {
             res.status(500).json({ message: 'Error updating call type', error });

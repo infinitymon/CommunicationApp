@@ -95,7 +95,7 @@ const HomePage = () => {
     const handleDialed = async (id) => {
         try {
             // Update the type in the database
-            await axios.put('http://localhost:5000/call/type', {
+            await axios.put('http://localhost:5000/call/typeUpdate', {
                 id: id,
                 type: 'Dialed'
             });

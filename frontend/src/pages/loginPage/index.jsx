@@ -45,7 +45,7 @@ const LoginPage = () => {
       if (response.data.message === "Success") {
         // setToken(response.data.token);
         handleToken(response.data.token);
-        if(role == 'Agent'){
+        if(role == 'agent'){
           navigate('/home')
         }
         else{
