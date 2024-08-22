@@ -17,7 +17,6 @@ const LoginPage = () => {
     // event.preventDefault();
 
     const tokenData = jwtDecode(token);
-    console.log(tokenData);
 
     const issuedAt = dayjs.unix(tokenData.iat);
     const expiresAt = dayjs.unix(tokenData.exp);
@@ -26,7 +25,6 @@ const LoginPage = () => {
 
     Cookies.set('token', token, {
       expires: duration, // Cookie expires in 1 day
-      secure: true, // Cookie will only be sent over HTTPS
       sameSite: 'Strict' // CSRF protection
     });
 

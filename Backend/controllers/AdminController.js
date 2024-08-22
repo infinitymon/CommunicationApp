@@ -58,7 +58,6 @@ class AdminController{
     }
 
     async upload(req, res) {
-        console.log(req.file)
         const file = req.file;
         if (!file) {
             return res.status(400).send('No file uploaded.');

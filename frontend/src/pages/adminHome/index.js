@@ -103,7 +103,13 @@ const AdminHome = () => {
                             <td>{item.duration}</td>
                             <td>{item.followupStatus}</td>
                             <td>{item.resolution}</td>
-                            <td onClick={(e) => {setSelectedAudio(e.target.value); setDialogOpen(true)}}>{item.recording}</td>
+                            <td>
+                                {item.recording? 
+                                    <audio controls>
+                                        <source src={item.recording} type="audio/mpeg" />
+                                    </audio>
+                                :null}
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -127,7 +133,10 @@ const AdminHome = () => {
                 <div className="dialog">
                     <div className="dialog-content">
                         <h2>Call Recording</h2>
-                        <audio src={selectedAudio} />
+                        <div style={{height: '50px'}}>
+                            {console.log(selectedAudio)}
+                            <audio src={selectedAudio} />
+                        </div>
                         <button onClick={() => {setDialogOpen(false);setSelectedAudio(null);}}>Close</button>
                     </div>
                 </div>

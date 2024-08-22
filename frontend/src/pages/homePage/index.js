@@ -123,6 +123,7 @@ const HomePage = () => {
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_BASE_URL}/call`, {
+            withCredentials: true,
             params: {
                 agent: agentId
             }

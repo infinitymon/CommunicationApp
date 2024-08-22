@@ -1,5 +1,7 @@
 import Calls from '../models/Calls.js';
 import appError from "../utils/AppError.js";
+import { jwtDecode } from "jwt-decode";
+import Users from '../models/User.js';
 
 class CallController{
     constructor(){
@@ -17,7 +19,13 @@ class CallController{
 
     async index (req, res, next){
         try {
+            const { id } = jwtDecode(req.cookies.token)
             let data = await Calls.findAll({ where: { agent: req.query.agent}})
+            let user = await Users.findOne({ where: id})
+
+            for(let d of data){
+                d.from = user.phoneNumber
+            }
             return this.apiResponse(res, "Records fetched successfully", 200, data)
         } catch (e) {
             return next(new appError(e?.message, 500))

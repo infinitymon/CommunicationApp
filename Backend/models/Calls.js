@@ -32,7 +32,7 @@ const Calls = sequelize.define('calls', {
         type: DataTypes.STRING,
     },
     recording: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT('long'),
     },
     agent:{
         type: DataTypes.STRING

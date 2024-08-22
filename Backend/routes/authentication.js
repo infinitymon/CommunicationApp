@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.post('/login', async (req, res, next) => {
     const userInfo = req.body
-    console.log(userInfo.email)
 
     User.findOne({
         where : {
@@ -15,7 +14,6 @@ router.post('/login', async (req, res, next) => {
     })
 
         .then(dbUser => {
-            console.log(dbUser)
             if (!dbUser) {
                 return res.json({
                     message: "Invalid Email or Password"
@@ -23,16 +21,12 @@ router.post('/login', async (req, res, next) => {
             }
             bcrypt.compare(userInfo.password, dbUser.dataValues.password)
                 .then(correct => {
-                    console.log(correct)
                     if (correct) {
                         const payload = {
-                            // password: dbUser.password,
                             id: dbUser.dataValues.id,
                             email: dbUser.dataValues.email,
                             role: dbUser.dataValues.role
                         }
-                        // console.log(payload)
-                        // console.log(process.env.JWT_SECRET)
                         var token = jwt.sign(
                             payload,
                             process.env.JWT_SECRET,
@@ -43,8 +37,6 @@ router.post('/login', async (req, res, next) => {
                             message: "Success",
                             token: `${token}`
                         })
-                        // console.log(token)
-                        // console.log(res.json)
                     }
                     else {
                         return res.json({
@@ -70,7 +62,6 @@ router.post('/register', async (req, res, next) => {
 
     user.save()
         .then(results => {
-            console.log(results)
             res.send({
                 data: {
                     _id: results._id,
