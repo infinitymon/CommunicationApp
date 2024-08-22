@@ -124,7 +124,7 @@ const HomePage = () => {
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_BASE_URL}/call`, {
             params: {
-                agent: 'agent 1'
+                agent: agentId
             }
         }).then(res => {
             const { data } = res.data;
